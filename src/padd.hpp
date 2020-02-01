@@ -14,12 +14,12 @@ class Padd
 {
 
 public:
-    explicit Padd(int &cpt, Message &msgman);
+    explicit Padd(double &cpt, Message &msgman);
     ~Padd();
-    void task(int acc);
+    void task(double acc);
 
 private:
-    int &m_cpt;
+    double &m_cpt;
     Mtx mtx;
     Message &m_msgman;
 };

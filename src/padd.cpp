@@ -3,7 +3,7 @@
 
 using namespace tutothreads;
 
-Padd::Padd(int &cpt, Message &msgman) : m_cpt(cpt), m_msgman(msgman)
+Padd::Padd(double &cpt, Message &msgman) : m_cpt(cpt), m_msgman(msgman)
 {
 }
 
@@ -11,7 +11,7 @@ Padd::~Padd()
 {
 }
 
-void Padd::task(int acc)
+void Padd::task(double acc)
 {
     m_msgman.add("Padd tâche entrée");
     m_msgman.add("Padd tâche avant v : " + std::to_string(m_cpt));

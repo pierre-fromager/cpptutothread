@@ -1,6 +1,6 @@
 
-#ifndef MYTHREAD_PSUB_HPP
-#define MYTHREAD_PSUB_HPP
+#ifndef MYTHREAD_PMUL_HPP
+#define MYTHREAD_PMUL_HPP
 
 #include <mutex>
 #include "message.hpp"
@@ -10,16 +10,16 @@ namespace tutothreads
 
 typedef std::mutex Mtx;
 
-class Psub
+class Pmul
 {
 
 public:
-    explicit Psub(int &cpt, Message &msgman);
-    ~Psub();
-    void task(int acc);
+    explicit Pmul(double &cpt, Message &msgman);
+    ~Pmul();
+    void task(double acc);
 
 private:
-    int &m_cpt;
+    double &m_cpt;
     Mtx mtx;
     Message &m_msgman;
 };

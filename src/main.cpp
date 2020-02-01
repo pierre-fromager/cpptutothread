@@ -3,7 +3,15 @@
  * @file main.cpp
  * @author pierre fromager (info@pier-infor.fr)
  * 
- * @brief introduction aux threads en c++
+ * @brief introduction aux threads en c++11 (// programming)
+ * 
+ * Objectifs :
+ * + Utiliser 2 objets : un additionneur et un multiplicateur
+ * + Séparer les traitements commutatifs des non commutatifs afin de préserver le résultat
+ * 
+ * Moyens :
+ * + 2 pools de threads avec chacun 2 thread / pool
+ * + 2 exécution de pool distinct
  * 
  * @version 0.1
  * @date 2020-02-01
@@ -15,7 +23,7 @@
 #include <vector>
 #include "message.hpp"
 #include "padd.hpp"
-#include "psub.hpp"
+#include "pmul.hpp"
 
 using namespace tutothreads;
 
@@ -25,29 +33,31 @@ typedef std::vector<std::thread> ThreadPool;
 int main()
 {
 
-  // ma valeur de départ
-  int v = 10;
+  // ma valeur de départ utilisée par nos threads
+  double v = 1;
 
   // Les instances partagés dans les threads
-  Message m;    // Messager
-  Padd a(v, m); // Additioneur qui utilise la valeur et le messager en référence
-  Psub s(v, m); // Soustracteur qui utilise la valeur et le messager en référence
+  Message msg;    // Messager
+  Padd a(v, msg); // Additioneur utilise v + msg en référence
+  Pmul m(v, msg); // Multiplicateur utilise v + msg en référence
 
-  // on définit une pile de thread
-  ThreadPool p = {};
+  // définition pool pour les tâches des opérations commutatives
+  ThreadPool pnc = {};
+  pnc.push_back(std::thread(&Padd::task, &a, 10)); // ajouter 10
+  pnc.push_back(std::thread(&Padd::task, &a, -3)); // soustrait 3
+  for (std::thread &tnc : pnc)
+    tnc.join();
 
-  // on prépare les tâches de traitement dans 4 threads concurrentes
-  p.push_back(std::thread(&Padd::task, &a, 10)); // ajouter 10
-  p.push_back(std::thread(&Psub::task, &s, 3));  // enlever 3
+  // définition pool pour les tâches de traitement des opérations non commutatives
+  ThreadPool pco = {};
+  pco.push_back(std::thread(&Pmul::task, &m, 10)); // multiplier x10
+  pco.push_back(std::thread(&Pmul::task, &m, .5)); // diviser x2
+  for (std::thread &tco : pco)
+    tco.join();
 
-  // on lance les tâches en // sans savoir par laquelle on commence
-  for (std::thread &t : p)
-  {
-    t.join();
-  }
-
-  m.add("Valeur finale " + std::to_string(v));
-  m.display(); // le résultat est toujours 17 car les tâches sont commutatives
+  // le résultat est toujours 85
+  msg.add("Valeur finale " + std::to_string(v));
+  msg.display();
 
   return 0;
 }
