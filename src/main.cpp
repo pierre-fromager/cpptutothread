@@ -24,10 +24,12 @@
 #include "message.hpp"
 #include "padd.hpp"
 #include "pmul.hpp"
+#include <assert.h>
 
 using namespace tutothreads;
 
-typedef std::vector<std::thread> ThreadPool;
+typedef std::thread Thread;
+typedef std::vector<Thread> ThreadPool;
 
 // thread initiale programme principal
 int main()
@@ -35,6 +37,7 @@ int main()
 
   // ma valeur de départ utilisée par nos threads
   double v = 1;
+  const double expected = 40;
 
   // Les instances partagés dans les threads
   Message msg;    // Messager
@@ -55,9 +58,10 @@ int main()
   for (std::thread &tco : pco)
     tco.join();
 
-  // le résultat est toujours 85
+  // le résultat est toujours 40
   msg.add("Valeur finale " + std::to_string(v));
   msg.display();
+  assert(v == expected);
 
   return 0;
 }
