@@ -3,7 +3,7 @@
  * @file main.cpp
  * @author pierre fromager (info@pier-infor.fr)
  * 
- * @brief introduction aux threads avec objets en c++11 (// programming)
+ * @brief threads sur objets en c++11 avec verrouillage par mutex
  * 
  * Objectifs :
  * + Utiliser 2 objets : un additionneur et un multiplicateur
@@ -11,7 +11,7 @@
  * 
  * Moyens :
  * + 2 pools de threads avec chacun 2 thread / pool
- * + 2 exécution de pool distinct
+ * + 2 exécutions en pool distincts
  * 
  * Vérifications :
  * + lancer le programme plusieurs fois et comparer le déroulement
@@ -24,10 +24,10 @@
  */
 #include <thread>
 #include <vector>
+#include <assert.h>
 #include "message.hpp"
 #include "padd.hpp"
 #include "pmul.hpp"
-#include <assert.h>
 
 using namespace tutothreads;
 
@@ -38,8 +38,9 @@ typedef typename std::vector<Thread> ThreadPool;
 int main()
 {
 
-  // ma valeur de départ utilisée par nos threads
+  // valeur de départ utilisée par nos threads
   double v = 1;
+  // valeur attendue en fin de traitement
   const double expected = 40;
 
   // Les instances partagés dans les threads
@@ -47,22 +48,25 @@ int main()
   Padd a(v, msg); // Additioneur utilise v + msg en référence
   Pmul m(v, msg); // Multiplicateur utilise v + msg en référence
 
-  // définition pool pour tâches d'opérations commutatives
+  // définition pool tâches commutatives
   ThreadPool pnc = {};
   pnc.push_back(Thread(&Padd::task, &a, 10)); // +10
   pnc.push_back(Thread(&Padd::task, &a, -3)); // -3
   for (Thread &tnc : pnc)
     tnc.join();
 
-  // définition pool pour tâches d'opérations non commutatives
+  // définition pool tâches non commutatives
   ThreadPool pco = {};
   pco.push_back(Thread(&Pmul::task, &m, 10)); // *10
   pco.push_back(Thread(&Pmul::task, &m, .5)); // /2
   for (Thread &tco : pco)
     tco.join();
 
+  // affichage valeur finale
   msg.add("Valeur finale " + std::to_string(v));
   msg.display();
+
+  // vérification valeur finale
   assert(v == expected);
 
   return 0;
