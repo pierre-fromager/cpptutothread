@@ -20,7 +20,7 @@ class Message
 public:
     explicit Message();
     ~Message();
-    void add(std::string message);
+    void add(std::string msg);
     void display();
     void init();
 
@@ -30,6 +30,6 @@ private:
     Mtx mtx;
 };
 
-} // namespace mythreads
+} // namespace tutothreads
 
 #endif

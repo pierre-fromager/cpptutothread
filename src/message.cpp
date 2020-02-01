@@ -20,9 +20,9 @@ void Message::init()
 
 void Message::add(std::string msg)
 {
-    mtx.lock(); // on vérouille
+    mtx.lock();                                                       // on vérouille
     m_messages.push_back(std::to_string(microtime()) + " -> " + msg); // on traite
-    mtx.unlock(); // on dévérouille
+    mtx.unlock();                                                     // on dévérouille
 }
 
 void Message::display()
