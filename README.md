@@ -6,6 +6,15 @@ Cette dernière n'est pas la meilleure en terme de performance mais il faut bien
 La programmation parallèle est un vaste sujet qui fait apparaître la notion de concurence.  
 Pour se réprésenter la notion de concurence il faut aborder la différence entre un code bloquant(synchrone) et un code non bloquant (aynchrone).  
 
+## Build
+
+* make (compile les source dans ./build/demo).
+* make check (vérifie le source).
+
+## Run
+
+* ./build/demo
+
 ## Historique
 
 C et C++ sont nativement bloquants comme beaucoup d'autres langages compilés.  
