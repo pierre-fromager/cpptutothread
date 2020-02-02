@@ -18,7 +18,7 @@ void Message::init()
     m_messages.clear();
 }
 
-void Message::add(std::string msg)
+void Message::add(const std::string &msg)
 {
     mtx.lock();                                                       // on vérouille
     m_messages.push_back(std::to_string(microtime()) + " -> " + msg); // on traite

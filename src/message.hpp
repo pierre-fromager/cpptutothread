@@ -20,7 +20,7 @@ class Message
 public:
     explicit Message();
     ~Message();
-    void add(std::string msg);
+    void add(const std::string &msg);
     void display();
     void init();
 
